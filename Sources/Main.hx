@@ -24,16 +24,20 @@ class Main {
 	private static var vertices: VertexBuffer;
 	private static var indices: IndexBuffer;
 	private static var texture: Image;
+	private static var texture2: Image;
 	private static var texunit: kha.graphics4.TextureUnit;
 	private static var offset: kha.graphics4.ConstantLocation;
 	private static var computeTexunit: kha.graphics4.TextureUnit;
+	private static var computeTexunit2: kha.graphics4.TextureUnit;
 	private static var computeLocation: kha.graphics4.ConstantLocation;
 	
 	public static function main(): Void {
 		System.start({title: "ComputeShader", width: 640, height: 480}, function (_) {
-			texture = Image.create(256, 256, TextureFormat.RGBA128);
+			texture = Image.create3D(256, 256, 256, TextureFormat.RGBA64);
+			texture2 = Image.create3D(256, 256, 256, TextureFormat.RGBA64);
 			
 			computeTexunit = Shaders.test_comp.getTextureUnit("destTex");
+			computeTexunit2 = Shaders.test_comp.getTextureUnit("destTex2");
 			computeLocation = Shaders.test_comp.getConstantLocation("roll");
 			
 			var structure = new VertexStructure();
@@ -73,12 +77,13 @@ class Main {
 		
 		g.setComputeShader(Shaders.test_comp);
 		g.setImageTexture(computeTexunit, texture);
+		g.setImageTexture(computeTexunit2, texture2);
 		g.setFloat(computeLocation, 0);
 		g.compute(Std.int(texture.width / 16), Std.int(texture.height / 16), 1);
 		
 		g.setPipeline(pipeline);
 		g.setMatrix(offset, FastMatrix4.rotationZ(0));
-		g.setTexture(texunit, texture);
+		g.setTexture(texunit, texture2);
 		g.setVertexBuffer(vertices);
 		g.setIndexBuffer(indices);
 		g.drawIndexedVertices();
