@@ -33,8 +33,8 @@ class Main {
 	
 	public static function main(): Void {
 		System.start({title: "ComputeShader", width: 640, height: 480}, function (_) {
-			texture = Image.create3D(256, 256, 256, TextureFormat.RGBA64);
-			texture2 = Image.create3D(256, 256, 256, TextureFormat.RGBA64);
+			texture = Image.create3D(256, 256, 256, TextureFormat.RGBA32);
+			texture2 = Image.create3D(256, 256, 256, TextureFormat.RGBA32);
 			
 			computeTexunit = Shaders.test_comp.getTextureUnit("destTex");
 			computeTexunit2 = Shaders.test_comp.getTextureUnit("destTex2");
